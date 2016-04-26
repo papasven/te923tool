@@ -24,7 +24,7 @@
 #define TE923CON_H_
 
 
-#define VERSION         "0.6.1"
+#define VERSION         "0.6.2"
 #define TRUE            1
 #define FALSE           0
 
@@ -67,7 +67,7 @@ typedef struct {
   unsigned char SysVer;                   // programversion system controller
   unsigned char BarVer;                   // programversion barometer
   unsigned char UvVer;                    // programversion UV sensor and ext. channels
-  unsigned char RccVer;                   // programversion remote controlled clock and sunset 
+  unsigned char RccVer;                   // programversion remote controlled clock and sunset
   unsigned char WindVer;                  // programversion wind- rain sensor
   _Bool battery1 :    1;                  // battery in sensor 1
   _Bool battery2 :    1;                  // battery in sensor 2

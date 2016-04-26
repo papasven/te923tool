@@ -98,60 +98,60 @@ void printData( Te923DataSet_t *data, char *iText ) {
   printf( "%d:"  , data->timestamp );
   for ( i = 0; i <= 5; i++ ) {
 
-    if ( data->_t[i] == 0 )  
+    if ( data->_t[i] == 0 )
       printf( "%0.2f:", data->t[i] );
     else
       printf( "%s:", iText );
-    
-    if ( data->_h[i] == 0 )  
+
+    if ( data->_h[i] == 0 )
       printf( "%d:", data->h[i] );
     else
       printf( "%s:", iText );
   }
-  
-  if ( data->_press == 0 ) 
+
+  if ( data->_press == 0 )
     printf( "%0.1f:", data->press );
   else
     printf( "%s:", iText );
 
-  if ( data->_uv == 0 ) 
+  if ( data->_uv == 0 )
     printf( "%0.1f:", data->uv );
   else
     printf( "%s:", iText );
 
-  if ( data->_forecast == 0 ) 
+  if ( data->_forecast == 0 )
     printf( "%d:", data->forecast );
   else
     printf( "%s:", iText );
 
-  if ( data->_storm == 0 ) 
+  if ( data->_storm == 0 )
     printf( "%d:", data->storm );
-  else 
+  else
     printf( "%s:", iText );
 
-  if ( data->_wDir == 0 ) 
+  if ( data->_wDir == 0 )
     printf( "%d:", data->wDir );
-  else 
+  else
     printf( "%s:", iText );
 
-  if ( data->_wSpeed == 0 ) 
+  if ( data->_wSpeed == 0 )
     printf( "%0.1f:", data->wSpeed );
-  else 
+  else
     printf( "%s:", iText );
 
-  if ( data->_wGust == 0 ) 
+  if ( data->_wGust == 0 )
     printf( "%0.1f:", data->wGust );
-  else 
+  else
     printf( "%s:", iText );
 
-  if ( data->_wChill == 0 ) 
+  if ( data->_wChill == 0 )
     printf( "%0.1f:", data->wChill );
-  else 
+  else
     printf( "%s:", iText );
 
-  if ( data->_RainCount == 0 ) 
+  if ( data->_RainCount == 0 )
     printf( "%d", data->RainCount );
-  else 
+  else
     printf( "%s:", iText );
 
   printf( "\n" );
@@ -161,11 +161,11 @@ void printData( Te923DataSet_t *data, char *iText ) {
 
 
 int main( int argc, char **argv ) {
-  
+
   char *iText = NULL;
   signed int opt;
   enum output output = rtdata;
-  
+
   while (( opt = getopt( argc, argv, "Ddhi:svb" ) ) != -1 ) {
     switch ( opt ) {
     case 'h':
@@ -194,8 +194,8 @@ int main( int argc, char **argv ) {
       if ( optopt == 'i' )
 	fprintf( stderr, "Option -%c requires an argument.\n", optopt );
       else if ( isprint( optopt ) )
-      	fprintf( stderr, "Unknown option `-%c'.\n", optopt ); 
-      else   
+      	fprintf( stderr, "Unknown option `-%c'.\n", optopt );
+      else
       	fprintf( stderr, "Unknown option character `\\x%x'.\n", optopt );
       return 1;
       break;
@@ -204,15 +204,15 @@ int main( int argc, char **argv ) {
 
   if ( iText == NULL )
     iText = "i";
-  
+
   struct usb_dev_handle *devh;
   devh = te923_handle();
   if ( devh == NULL )
-    return 1;      
-  
+    return 1;
+
   if (debug > 0)
     printf("[DEBUG] VER %s\n",VERSION);
-  
+
   if ( ( output == rtdata ) || ( output == memdump ) ) {
     Te923DataSet_t *data;
     data = ( Te923DataSet_t* )malloc( sizeof( Te923DataSet_t ) );
@@ -229,25 +229,25 @@ int main( int argc, char **argv ) {
 	count = 3442;
       }
       for ( i = 0; i < count; i++ ) {
-	get_te923_memdata( devh, data, bigmem );
-	printData( data, iText);
+	       get_te923_memdata( devh, data, bigmem );
+	       printData( data, iText);
       }
     }
+    free(data);
   }
-  
+
   if ( output == status ) {
     Te923DevSet_t *status;
-    status = ( Te923DevSet_t* )malloc( sizeof( Te923DevSet_t ) ); 
+    status = ( Te923DevSet_t* )malloc( sizeof( Te923DevSet_t ) );
     get_te923_devstate( devh, status );
     printf( "0x%x:0x%x:0x%x:0x%x:0x%x:%d:%d:%d:%d:%d:%d:%d:%d\n",
 	    status->SysVer, status->BarVer, status->UvVer, status->RccVer, status->WindVer,
 	    status->batteryRain, status->batteryUV, status->batteryWind, status->battery5,
 	    status->battery4, status->battery3, status->battery2, status->battery1
 	    );
+    free(status);
   }
-  
+
   te923_close( devh );
   return 0;
 }
-
-  
